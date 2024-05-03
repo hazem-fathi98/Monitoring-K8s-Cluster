@@ -148,5 +148,8 @@ $ kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-passw
 ```
 
 ## Snippets
+![1](https://github.com/hazem-fathi98/Monitoring-K8s-Cluster/assets/161210724/12108fd4-46a2-4920-8887-6b5518e8b32e)
+![5](https://github.com/hazem-fathi98/Monitoring-K8s-Cluster/assets/161210724/14744606-785b-42cc-8977-f2eea3d88765)
+![4](https://github.com/hazem-fathi98/Monitoring-K8s-Cluster/assets/161210724/f26a35ed-2cf8-42e9-b333-de6985dd17da)
 
 

@@ -6,9 +6,7 @@ In this project, we'll deploy a Kubernetes cluster using Minikube for efficient 
 
 1. [Prerequisites](#prerequisites)
 2. [Installation](#installation)
-3. [Usage](#usage)
-4. [Outputs](#outputs)
-5. [Cleanup](#cleanup)
+3. [Snippets](#snippets)
 
 ## Prerequisites
 
@@ -100,74 +98,55 @@ $ chmod 700 get_helm.sh
 ```bash 
 $ ./get_helm.sh
 ```
+## Prometheus Installation
 
-### Application Files
-
-These files are common in both applications.
-- **main.tf:** Defines the main infrastructure components and references modules.
-- **providers.tf:** Configures the backend for storing the Terraform state file and implements locking.
-- **variables.tf:** Defines input variables for the main module and modules.
-- **terraform.tfvars:** Variables file specifying values for the project.
-
-### Modules
-
-In order to emphasize the concept of modularity. This project is divided into modules leveraging Terraform modules to encapsulate infrastructure code for reusability and it is partitioned as follows:
-1. **EC2 Module**: This part is related with the managing of the EC2 instances.
-2. **S3 Module**: It is concerned with the managing of S3 bucket.
-3. **DynamoDB Module**: It manages the DynamoDB table.
-4. **Networks Module**: It is responsible for managing VPC, Security groups, Internet
-gateway, Subnets, and Routing tables.
-
-
-## Usage
-
-### Prerequisites
-
-1. [Terraform](https://www.terraform.io/) installed.
-2. AWS credentials configured with the necessary permissions.
-
-### Configuration
-3. Clone the repository:
-```bash
-git clone https://github.com/hazem-fathi98/terraform-project.git
+1. Add the Prometheus repository via Helm: 
+```bash 
+$ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
 ```
-4. Update `terraform.tfvars` with the desired values for your project.
-5. Change to the project directory of app1:
-```bash
-cd 'Terraform Project'/app1
+2. Update the repo:
+```bash 
+$ helm repo update
 ```
-6. Initialize Terraform:
-```bash
-terraform init
+3.  Install Prometheus packages:
+```bash 
+$ helm install prometheus prometheus-community/prometheus
 ```
-7. Plan the Terraform configuration:
-```bash
-terraform plan
+4. Exposing Prometheus service:
+```bash 
+$ kubectl expose service prometheus-server --type=NodePort --target-port=9090 --name=prometheus-server-ext
 ```
-8. Apply the Terraform configuration:
-```bash
-terraform apply
+5. Accessing Prometheus service via minikube:
+```bash 
+$ minikube service prometheus-server-ext
 ```
-9. Confirm the changes and enter `yes` when prompted.
-10. Walk through the same sequence applied previously to deploy the second application app2.
+## Grafana Installation
 
-
-
-## Outputs
-
-Concerning the first application (app1) Terraform will successfully provision and initialize our infrastructure within the selected region including:
-1. EC2 Instance.
-2. S3 Bucket including the state file and another bucket initiated by the configuration.
-3. DynamoDB table.
-4. Network components including VPC, Security group, Subnets and Internet gateway.
-
-For the second application (app2) will be resulting the same resources but in a different region.
-
-## Cleanup
-
-1. To destroy the deployed resources, run:
-```bash
-terraform destroy
+1. Add the Grafana repository
+```bash 
+$ helm repo add grafana https://grafana.github.io/helm-charts
 ```
-2. Confirm the deletion and enter `yes` when prompted.
-3. Verify that changes are submitted successfully by checking resources through the AWS Management Console or using the AWS CLI.
+2. Verify the repository was added:
+```bash 
+$ helm repo list
+```
+3.  Download the latest Grafana Helm charts:
+```bash 
+$ helm repo update
+```
+4. Exposing Grafana service:
+```bash 
+$ kubectl expose service grafana --type=NodePort --target-port=3000 --name=grafana-ext
+```
+5. Accessing Grafana service via helm:
+```bash 
+$ minikube service grafana-ext
+```
+6. Retrieve Grafana password:
+```bash 
+$ kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+```
+
+## Snippets
+
+

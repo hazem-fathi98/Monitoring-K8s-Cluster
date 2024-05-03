@@ -5,12 +5,12 @@ In this project, we'll deploy a Kubernetes cluster using Minikube for efficient 
 ## Table Of Contents
 
 1. [Prerequisites](#prerequisites)
-2. [Installation](#installtion)
+2. [Installation](#installation)
 3. [Usage](#usage)
 4. [Outputs](#outputs)
 5. [Cleanup](#cleanup)
 
-## Prerequisite
+## Prerequisites
 
 - **Docker**
 - **Minikube**
